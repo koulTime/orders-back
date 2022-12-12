@@ -39,8 +39,15 @@ const PORT = process.env.PORT || 4001;
 app.use(express.json());
 app.post("/send-msg", (req, res) => {
     payload = req.body;
+    try {
+        sendData(payload);  // pass the data to the function we defined
+    } catch (error) {
+        console.log(error)
+        res.send(
 
-    sendData(payload);  // pass the data to the function we defined
+            error
+        )
+    }
     console.log("A message is sent to queue")
     res.send(
         {
