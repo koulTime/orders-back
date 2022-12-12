@@ -55,3 +55,5 @@ app.post("/send-msg", (req, res) => {
 // })
 
 app.listen(PORT, () => console.log("Server running at port " + PORT));
+// Export the Express API
+module.exports = app;
