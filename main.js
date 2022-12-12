@@ -1,6 +1,6 @@
 const amqp = require("amqplib");
 
-
+var channel, connection;
 //global variables
 async function connectQueue() {
 
@@ -19,9 +19,7 @@ async function connectQueue() {
 
 async function sendData(data) {
     // send data to queue
-    var aux = await connectQueue();
-    var channel = aux[0];
-    var connection = aux[1];
+    await connectQueue();
     await channel.sendToQueue("online-orders", Buffer.from(JSON.stringify(data)));
 
     // close the channel and connection
