@@ -50,7 +50,8 @@ app.post("/online-order", (req, res) => {
     console.log("A message is sent to queue")
     res.send(
         {
-            "Message": "Your online order has been sent successfully"
+            "Message": "Your online order has been sent successfully",
+            "data": payload
         }
     ); //response to the API request
 });
@@ -68,7 +69,9 @@ app.post("/onsite-order", (req, res) => {
     console.log("A message is sent to queue")
     res.send(
         {
-            "Message": "Your onsite order has been sent successfully"
+            "Message": "Your onsite order has been sent successfully",
+            "data": payload
+
         }
     ); //response to the API request
 });
