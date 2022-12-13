@@ -11,16 +11,17 @@ async function connectQueue() {
         channel = await connection.createChannel()
 
         await channel.assertQueue("online-orders")
+        await channel.assertQueue("onsite-orders")
         return [channel, connection];
     } catch (error) {
         console.log(error)
     }
 }
 
-async function sendData(data) {
+async function sendData(data,queueName) {
     // send data to queue
     await connectQueue();
-    await channel.sendToQueue("online-orders", Buffer.from(JSON.stringify(data)));
+    await channel.sendToQueue(queueName, Buffer.from(JSON.stringify(data)));
 
     // close the channel and connection
     await channel.close();
@@ -35,10 +36,10 @@ const express = require("express");
 const app = express();
 const PORT = process.env.PORT || 4001;
 app.use(express.json());
-app.post("/send-msg", (req, res) => {
+app.post("/online-order", (req, res) => {
     payload = req.body;
     try {
-        sendData(payload);  // pass the data to the function we defined
+        sendData(payload,'online-orders');  // pass the data to the function we defined
     } catch (error) {
         console.log(error)
         res.send(
@@ -49,7 +50,25 @@ app.post("/send-msg", (req, res) => {
     console.log("A message is sent to queue")
     res.send(
         {
-            "Message": "Your order has been send successfully"
+            "Message": "Your online order has been sent successfully"
+        }
+    ); //response to the API request
+});
+app.post("/onsite-order", (req, res) => {
+    payload = req.body;
+    try {
+        sendData(payload,'onsite-orders');  // pass the data to the function we defined
+    } catch (error) {
+        console.log(error)
+        res.send(
+
+            error
+        )
+    }
+    console.log("A message is sent to queue")
+    res.send(
+        {
+            "Message": "Your onsite order has been sent successfully"
         }
     ); //response to the API request
 });
